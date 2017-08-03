@@ -1,0 +1,69 @@
+<div class="student-body" *ngIf="!model.studentId">
+  <div class="student-login-form">
+    <img src="https://d3bvw51884uqkr.cloudfront.net/d38bbc6ff08136c3bbd2ad1782d524b3c6c7b020/images/logo/pbc_loginlogo.jpg" alt="Portland Bible College">
+    <form (submit)="studentLogin()">
+      <div class="form-group">
+        <input type="text" [(ngModel)]="login.username" name="username" class="form-control" id="Username" placeholder="Username"
+          required>
+      </div>
+      <div class="form-group">
+        <input type="password" [(ngModel)]="login.password" name="password" class="form-control" id="password" placeholder="Password"
+          required>
+      </div>
+      <div class="student-login-error" *ngIf="model.error">
+        {{model.error}}
+      </div>
+      <button type="submit" [disabled]="model.loggingIn" class="btn btn-default">{{model.loginBtnText}}</button>
+    </form>
+  </div>
+  <div class="student-login-footer">
+    <a href="http://www.populiweb.com/legal/terms" style="float:left;">Terms of Service</a> ©
+    <a href="http://populiweb.com/" target="_blank">Populi</a> 2016
+  </div>
+</div>
+
+<div class="student-body" *ngIf="model.studentId">
+  <!--<div class="student-body" >-->
+  <div class="student-form">
+    <form (submit)="submitForm()">
+      <label>Type</label>
+      <div style="margin-bottom:20px;margin-top:10px;">
+        <div class="radio-inline">
+          <label>
+                        <input [(ngModel)]="model.form.type" type="radio" name="optionsRadios" id="absentRadio" value="absent">
+                        Absent
+			</label>
+        </div>
+        <div class="radio-inline">
+          <label>
+                        <input [(ngModel)]="model.form.type" type="radio" name="optionsRadios" id="tardyRadio" value="tardy">
+                        Tardy
+                    </label>
+        </div>
+      </div>
+      <div class="form-group" style="width:300px;">
+        <label>Date of absence
+                    <span style="font-weight:normal"> {{model.form.date | date}}</span>
+                </label>
+        <!-- <datepicker [(ngModel)]="model.form.date" (ngModelChange)="dateChanged($event)" [datepickerMode]="day" [minDate]="model.minDate"
+          [maxDate]="model.maxDate" [showWeeks]="false" [ngModelOptions]="{standalone: true}"></datepicker> -->
+        <div class="error-message" *ngIf="model.dateError">
+          Please select your date of absence/tardy
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="class">Class</label>
+        <select id="class" class="form-control">
+                    <option value="absent">Class 1</option>
+                    <option value="absent">Class 2</option>
+                </select>
+      </div>
+      <div class="form-group">
+        <label for="reason">Reason</label>
+        <textarea class="form-control" id="reason" placeholder="Enter a reason for your absence or tardy" required></textarea>
+      </div>
+
+      <button type="submit" [disabled]="model.submitting" class="btn btn-default">{{model.submitBtnText}}</button>
+    </form>
+  </div>
+</div>

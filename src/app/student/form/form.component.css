@@ -1,0 +1,72 @@
+.student-body {
+    padding-top: 5em;
+    background-color: #ddd;
+    height:100%;
+    width:100%;
+}
+
+.student-login-form {
+    width: 400px;
+    margin: 3.5em auto 0;
+    padding: 24px 24px 18px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.student-login-form img {
+    display: block;
+    margin: 0 auto;
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom:20px;
+}
+
+.student-login-error {
+    background-color: #fd6767;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.student-login-footer {
+    width: 300px;
+    margin: 0 auto !important;
+    text-align: right !important;
+    padding: 9px 32px;
+}
+
+.student-form {
+    width: 50%;
+    min-width:350px;
+    margin: 3.5em auto 0;
+    padding: 24px 24px 18px;
+    background-color: white;
+}
+
+@media only screen and (max-device-width: 480px) {
+    .student-login-form {
+        width:100%;
+        margin:auto;
+        margin-top:30px;
+    }
+
+    .student-login-form button{
+        width:100%;
+    }
+
+    .student-login-footer {
+        width:100%;
+        padding-top: 20px;
+    }
+
+    .student-form {
+        margin:0;
+        width:100%;
+    }
+
+    .student-form button{
+        width:100%;
+    }
+}
