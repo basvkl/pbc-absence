@@ -2,20 +2,19 @@
   <div class="student-login-form">
     <img src="https://d3bvw51884uqkr.cloudfront.net/d38bbc6ff08136c3bbd2ad1782d524b3c6c7b020/images/logo/pbc_loginlogo.jpg" alt="Portland Bible College">
     <form (submit)="studentLogin()">
-      <div class="form-group">
-        <input type="text" [(ngModel)]="login.username" name="username" class="form-control" id="Username" placeholder="Username"
-          required>
-      </div>
-      <div class="form-group">
-        <input type="password" [(ngModel)]="login.password" name="password" class="form-control" id="password" placeholder="Password"
-          required>
-      </div>
+      <md-input-container style="width:100%;">
+        <input type="text" mdInput placeholder="Username" name="username" [(ngModel)]="login.username">
+      </md-input-container>
+      <md-input-container style="width:100%;">
+        <input type="password" mdInput placeholder="Password" name="password" [(ngModel)]="login.password">
+      </md-input-container>
       <div class="student-login-error" *ngIf="model.error">
         {{model.error}}
       </div>
-      <button type="submit" [disabled]="model.loggingIn" class="btn btn-default">{{model.loginBtnText}}</button>
+      <button type="submit" [disabled]="model.loggingIn" color="primary" md-raised-button>{{model.loginBtnText}}</button>
     </form>
   </div>
+
   <div class="student-login-footer">
     <a href="http://www.populiweb.com/legal/terms" style="float:left;">Terms of Service</a> ©
     <a href="http://populiweb.com/" target="_blank">Populi</a> 2016

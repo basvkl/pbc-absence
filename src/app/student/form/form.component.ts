@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from "@angular/forms";
 import { PopuliService } from '../../populi.service';
 
 import * as moment from 'moment';
@@ -11,7 +12,7 @@ import * as moment from 'moment';
 export class FormComponent implements OnInit {
 
 	login;
-    model;
+	model;
 
 	constructor(private populiService: PopuliService) { }
 
