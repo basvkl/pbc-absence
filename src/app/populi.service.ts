@@ -1,37 +1,56 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Injectable()
-export class PopuliService {
+export class PopuliService implements CanActivate {
 
 	private serverUrl = "http://localhost:8888/pbc/absence/ag2-server/";
-	private toke = null;
+	private token = null;
 	private personId = null;
 
-	constructor(private http: Http) { }
+	constructor(private http: Http, private router: Router) {  
+		if(sessionStorage.token && sessionStorage.personId){
+			this.token = sessionStorage.token;
+			this.personId = sessionStorage.personId;
+		}
+	}
+
+	canActivate() {
+		if (this.token && this.personId) {
+			return true;
+		}
+		else {
+			this.router.navigate(['']);
+		}
+		return ;
+	}
 
 	loginUser(username, password): Observable<any> {
-
 		var postData = "function=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
-
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this.http.post(this.serverUrl, postData, { headers: headers })
-			.map(res => res.json())
+			.map(res => this.handleLoginResponse(res))
 			.catch(this.handleError);
-		//                    .subscribe(
-		//                      data => this.saveJwt(data.id_token),
-		//                      err => this.logError(err),
-		//                      () => console.log('Authentication Complete')
-		//                    );
 	}
 
-	private saveJwt(jwt) {
-		if (jwt) {
-			localStorage.setItem('id_token', jwt)
+	private handleLoginResponse(res: Response) {
+		if (res.status < 200 || res.status >= 300) {
+			throw new Error('Bad response status ' + res.status);
 		}
+		let body = res.json();
+		this.token = body.token;
+		this.personId = body.personId;
+		//TODO: https://stackoverflow.com/questions/37164758/angular-2-convenient-way-to-store-in-session
+		sessionStorage.setItem('token', body.token);
+		sessionStorage.setItem('personId', body.personId);
+		
+		return body;
 	}
 
 	getStudentClasses(studentId): Array<any> {

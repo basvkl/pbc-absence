@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule } from '@angular/material';
+import { CdkTableModule } from '@angular/cdk';
+
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -8,31 +10,36 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { FormComponent } from './student/form/form.component';
+import { LoginComponent } from './student/login/login.component';
 import { HistoryComponent } from './student/history/history.component';
 import { PopuliService } from './populi.service';
 
 
 // Route Configuration
 export const routes: Routes = [
-  { path: '', component: FormComponent },
-  //{ path: 'admin', component: AdminComponent }
+  { path: '', component: LoginComponent },
+  { path: 'history', component: HistoryComponent, canActivate: [PopuliService] }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormComponent,
+    LoginComponent,
     HistoryComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule.forChild(routes)
+    RouterModule.forRoot(routes),
+    //MaterialDesign
+    MdButtonModule,
+    MdCardModule,
+    MdInputModule,
+    MdTableModule,
+    CdkTableModule
   ],
   exports: [RouterModule],
   providers: [PopuliService],

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PopuliService } from '../../populi.service';
 
 @Component({
   selector: 'app-history',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+  constructor(private populiService: PopuliService) { }
 
   ngOnInit() {
+    console.log(this.populiService.canActivate());
   }
 
 }

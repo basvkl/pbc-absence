@@ -1,0 +1,58 @@
+<div class="student-body" *ngIf="!model.studentId">
+  <div class="student-login-form">
+    <img src="https://d3bvw51884uqkr.cloudfront.net/d38bbc6ff08136c3bbd2ad1782d524b3c6c7b020/images/logo/pbc_loginlogo.jpg" alt="Portland Bible College">
+    <form (submit)="studentLogin()">
+      <md-input-container style="width:100%;">
+        <input type="text" mdInput placeholder="Username" name="username" [(ngModel)]="login.username">
+      </md-input-container>
+      <md-input-container style="width:100%;">
+        <input type="password" mdInput placeholder="Password" name="password" [(ngModel)]="login.password">
+      </md-input-container>
+      <div class="student-login-error" *ngIf="model.error">
+        {{model.error}}
+      </div>
+      <button type="submit" [disabled]="model.loggingIn" color="primary" md-raised-button>{{model.loginBtnText}}</button>
+    </form>
+  </div>
+
+  <div class="student-login-footer">
+    <a href="http://www.populiweb.com/legal/terms" style="float:left;">Terms of Service</a> ©
+    <a href="http://populiweb.com/" target="_blank">Populi</a> 2016
+  </div>
+</div>
+
+<div class="student-body" *ngIf="model.studentId">
+  <md-table #table [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container cdkColumnDef="userId">
+      <md-header-cell *cdkHeaderCellDef> ID </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
+    </ng-container>
+
+    <!-- Progress Column -->
+    <ng-container cdkColumnDef="progress">
+      <md-header-cell *cdkHeaderCellDef> Progress </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.progress}}% </md-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="userName">
+      <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+    </ng-container>
+
+    <!-- Color Column -->
+    <ng-container cdkColumnDef="color">
+      <md-header-cell *cdkHeaderCellDef>Color</md-header-cell>
+      <md-cell *cdkCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+
+</div>

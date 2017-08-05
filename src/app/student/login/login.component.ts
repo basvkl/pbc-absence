@@ -1,31 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from "@angular/forms";
+import { Router } from '@angular/router';
 import { PopuliService } from '../../populi.service';
 
 import * as moment from 'moment';
 
 @Component({
-	selector: 'app-form',
-	templateUrl: './form.component.html',
-	styleUrls: ['./form.component.css']
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.css']
 })
-export class FormComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
 	login;
 	model;
 
-	constructor(private populiService: PopuliService) { }
+	constructor(private populiService: PopuliService, private router: Router) { }
 
 	ngOnInit(): void {
-		console.log("student init");
 		this.model = {
-			form: {
-				type: "absent"
-			},
-			minDate: moment().days(-7).toDate(),
-			maxDate: moment().toDate(),
 			submitBtnText: "Submit",
-			loginBtnText: "Login"
+			loginBtnText: "Login",
+			loggingIn: false
 		};
 		this.login = {
 			username: "",
@@ -38,22 +34,16 @@ export class FormComponent implements OnInit {
 		this.model.loggingIn = true;
 
 		this.populiService.loginUser(this.login.username, this.login.password).subscribe(response => {
-			if (response.error) {
+			if (response && response.error) {
 				this.model.loginBtnText = "Login";
 				this.model.loggingIn = false;
 				this.model.error = response.error;
 			} else {
 				console.log(response);
 				this.model.studentId = response.personId;
+				this.router.navigate(['history']);
 			}
-
 		})
-	}
-
-	dateChanged(): void {
-		if (this.model.form.date && this.model.dateError) {
-			this.model.dateError = false;
-		}
 	}
 
 	submitForm(): void {
