@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule, MdProgressBarModule, MdToolbarModule, MdTabsModule, MdIconModule, MdListModule, MdGridListModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule, MdProgressBarModule, MdToolbarModule, MdTabsModule, MdIconModule, MdListModule, MdGridListModule, MdDialogModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 
@@ -11,7 +11,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './student/login/login.component';
-import { HistoryComponent } from './student/history/history.component';
+import { HistoryComponent, ExcuseDialog } from './student/history/history.component';
 import { PopuliService } from './populi.service';
 
 
@@ -27,6 +27,7 @@ export const routes: Routes = [
 		AppComponent,
 		LoginComponent,
 		HistoryComponent,
+		ExcuseDialog
 	],
 	imports: [
 		BrowserModule,
@@ -46,8 +47,10 @@ export const routes: Routes = [
 		MdTabsModule,
 		MdIconModule,
 		MdListModule,
-		MdGridListModule
+		MdGridListModule,
+		MdDialogModule
 	],
+	entryComponents: [ExcuseDialog],
 	exports: [RouterModule],
 	providers: [PopuliService],
 	bootstrap: [AppComponent]

@@ -78,3 +78,7 @@ body {
 .history-tabs .mat-tab-header {
     display:none !important;
 }
+
+.meeting-item {
+    border-bottom: 1px solid #e2e2e2
+}

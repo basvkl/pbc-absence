@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PopuliService } from '../../populi.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {Location} from '@angular/common';
+import { MdDialog, MdDialogRef } from '@angular/material';
+import { Location } from '@angular/common';
 
 @Component({
 	selector: 'app-history',
@@ -16,7 +17,7 @@ export class HistoryComponent implements OnInit {
 	selectedTabIndex = 0;
 	selectedCourse;
 
-	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location ) { }
+	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) { }
 
 	ngOnInit() {
 		this.activatedRoute.params.subscribe((params: Params) => {
@@ -29,17 +30,16 @@ export class HistoryComponent implements OnInit {
 			//console.log(response);
 			this.term = response;
 			this.populiService.getMyCourses(this.term.termid).subscribe(response => {
-				console.log(response);
-				response.my_course = response.my_course.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} ); 
+				// console.log(response);
+				response.my_course = response.my_course.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
 				this.courses = response;
 			});
 		});
 	}
 
-	goBack():void {
-		console.log("going back");
+	goBack(): void {
 		this.selectedTabIndex = 0;
-		this.location.go( '/history' );
+		this.location.go('/history');
 	}
 
 	selectedIndexChange(val: number) {
@@ -51,11 +51,7 @@ export class HistoryComponent implements OnInit {
 		this.meetings = false;
 		this.selectedCourse = course;
 		let that = this;
-		this.router.navigate(['history/' + course.instanceid ]);
-
-		setTimeout(function () {
-			that.getCourseInstanceMeetings(course.instanceid);
-		}, 1000);
+		this.router.navigate(['history/' + course.instanceid]);
 	}
 
 	getCourseInstanceMeetings(instanceId): void {
@@ -72,8 +68,29 @@ export class HistoryComponent implements OnInit {
 		}
 	}
 
-	logout(): void {
-		this.populiService.logout(); 
+	showExcuseModal(): void {
+		console.log("Always excuses");
+		let dialogRef = this.dialog.open(ExcuseDialog, {
+			height: '400px',
+			width: '600px',
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log(`Dialog result: ${result}`); // Pizza!
+		});
 	}
 
+	logout(): void {
+		this.populiService.logout();
+	}
+
+}
+
+
+@Component({
+	selector: 'excuse-dialog',
+	templateUrl: 'excuse-dialog.html',
+})
+export class ExcuseDialog {
+	constructor(public dialogRef: MdDialogRef<ExcuseDialog>) { }
 }

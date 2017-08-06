@@ -40,17 +40,19 @@
           <h4>{{selectedCourse?.name}}</h4>
           <div>
             <md-list *ngIf="meetings">
-              <md-card *ngFor="let meeting of meetings" style="border-bottom: 1px solid #e2e2e2">
-                <md-grid-list cols="4" rows="1" rowHeight="20px">
+               <md-card > 
+                <md-grid-list cols="4" rows="1" rowHeight="40px" *ngFor="let meeting of meetings" class="meeting-item">
                   <md-grid-tile colspan="3" class="grid-left-align">
                     {{meeting.start | date:'mediumDate'}}<span style="color:gray;margin-left:10px;"> {{meeting.start | date:'shortTime'}}</span>
                   </md-grid-tile>
                   <md-grid-tile colspan="1">
-                    <div *ngIf="meeting.meetingid">...</div>
-                    <div style="float:right;" *ngIf="!meeting.meetingid">No attendance has been set</div>
+                    <div style="float:right;" *ngIf="!meeting.meetingid">
+						<button md-button (click)="showExcuseModal()">Submit Excuse</button>
+					</div>
+                    <div style="float:right;" *ngIf="meeting.meetingid">No attendance has been set</div>
                   </md-grid-tile>
                 </md-grid-list>
-              </md-card>
+               </md-card> 
             </md-list>
           </div>
         </div>
