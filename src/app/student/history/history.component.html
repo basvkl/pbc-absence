@@ -1,3 +1,61 @@
-<p>
-  history works!
-</p>
+<div *ngIf="!term || !courses">
+  <md-progress-bar mode="indeterminate"></md-progress-bar>
+</div>
+<div *ngIf="term && courses && selectedTabIndex && !meetings">
+  <md-progress-bar mode="indeterminate"></md-progress-bar>
+</div>
+
+<div *ngIf="term">
+  <md-toolbar>
+    <span>Courses for {{term.name}}</span>
+    <span class="fill-space"></span>
+    <span>
+		<button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout</button> 
+	</span>
+  </md-toolbar>
+  <div style="padding:15px;padding-top:35px;">Select a course to view your attendance</div>
+
+  <div style="padding:10px;" *ngIf="courses">
+    <md-tab-group (selectedIndexChange)="selectedIndexChange($event)" [selectedIndex]="selectedTabIndex" class="history-tabs">
+      <md-tab label="One">
+        <div style="padding:10px;">
+          <md-card md-ripple *ngFor="let course of courses.my_course" (click)="selectCourse(course)">
+            <md-grid-list cols="4" rows="1" rowHeight="45px">
+              <md-grid-tile colspan="3" class="grid-left-align">
+                <div>
+                  <h4>{{course.name}}</h4>
+                  <p>{{course.abbrv}}</p>
+                </div>
+              </md-grid-tile>
+              <md-grid-tile colspan="1"><md-icon>arrow_forward</md-icon></md-grid-tile>
+            </md-grid-list>
+          </md-card>
+        </div>
+      </md-tab>
+      <md-tab label="Two">
+        <div style="padding:10px;">
+          <button md-icon-button (click)="goBack()">
+			<md-icon>arrow_back</md-icon> Courses
+		  </button>
+          <h4>{{selectedCourse?.name}}</h4>
+          <div>
+            <md-list *ngIf="meetings">
+              <md-card *ngFor="let meeting of meetings" style="border-bottom: 1px solid #e2e2e2">
+                <md-grid-list cols="4" rows="1" rowHeight="20px">
+                  <md-grid-tile colspan="3" class="grid-left-align">
+                    {{meeting.start | date:'mediumDate'}}<span style="color:gray;margin-left:10px;"> {{meeting.start | date:'shortTime'}}</span>
+                  </md-grid-tile>
+                  <md-grid-tile colspan="1">
+                    <div *ngIf="meeting.meetingid">...</div>
+                    <div style="float:right;" *ngIf="!meeting.meetingid">No attendance has been set</div>
+                  </md-grid-tile>
+                </md-grid-list>
+              </md-card>
+            </md-list>
+          </div>
+        </div>
+      </md-tab>
+    </md-tab-group>
+
+  </div>
+</div>

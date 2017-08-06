@@ -29,6 +29,13 @@ export class PopuliService implements CanActivate {
 		return ;
 	}
 
+	logout() {
+		this.token = null;
+		this.personId = null;
+		sessionStorage.clear();
+		this.router.navigate(['']);
+	}
+
 	loginUser(username, password): Observable<any> {
 		var postData = "function=login&username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
 		var headers = new Headers();
@@ -46,33 +53,48 @@ export class PopuliService implements CanActivate {
 		let body = res.json();
 		this.token = body.token;
 		this.personId = body.personId;
-		//TODO: https://stackoverflow.com/questions/37164758/angular-2-convenient-way-to-store-in-session
 		sessionStorage.setItem('token', body.token);
 		sessionStorage.setItem('personId', body.personId);
-		
 		return body;
 	}
 
-	getStudentClasses(studentId): Array<any> {
-		return [];
+	getCurrentTerm(): Observable<any>  {
+		var postData = "function=getCurrentAcademicTerm&token=" + this.token;
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);
 	}
 
-	getList(): void {
-		console.log("getting list")
+	getMyCourses(termId): Observable<any>  {
+		var postData = "function=getStudentCourses&token=" + this.token + "&personId=" + this.personId + "&termId=" + termId;
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);
+	}
+
+	getCourseInstanceMeetings(instanceId): Observable<any>  { 
+		var postData = "function=getCourseInstanceMeetings&token=" + this.token + "&instanceId=" + instanceId;
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);
+	}
+
+	private handleResponse(res: Response) {
+		if (res.status < 200 || res.status >= 300) {
+			throw new Error('Bad response status ' + res.status);
+		}	
+		let body = res.json();		
+		return body;
 	}
 
 	private handleError(error: Response | any) {
-		// In a real world app, we might use a remote logging infrastructure
-		//        let errMsg: string;
-		//        if (error instanceof Response) {
-		//            const body = error.json() || '';
-		//            const err = body.error || JSON.stringify(body);
-		//            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-		//        } else {
-		//            errMsg = error.message ? error.message : error.toString();
-		//        }
-
-		//        console.error(errMsg);
 		console.error(error);
 		return Observable.throw(error);
 	}

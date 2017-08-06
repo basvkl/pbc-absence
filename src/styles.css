@@ -75,3 +75,6 @@ body {
     text-transform: uppercase;
 }
     
+.history-tabs .mat-tab-header {
+    display:none !important;
+}
