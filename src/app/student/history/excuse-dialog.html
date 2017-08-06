@@ -1,9 +1,9 @@
 <h1 md-dialog-title>Submit Excuse</h1>
 <div md-dialog-content>
   <md-input-container class="full-width">
-    <textarea mdInput mdAutosizeMinRows rows="10" cols="200" style="width:100%;" placeholder="Please state the reason for your absense/tardiness" id="description"></textarea>
+    <textarea mdInput mdAutosizeMinRows rows="10" cols="200" style="width:100%;" [(ngModel)]="excuse" placeholder="Please state the reason for your absense/tardiness" id="description"></textarea>
   </md-input-container>
 </div>
 <div md-dialog-actions>
-  <button md-button md-dialog-close="Option 2">Submit</button>
+  <button md-button md-dialog-close="{{excuse}}">Submit</button>
 </div>
