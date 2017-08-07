@@ -141,6 +141,15 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
+	getAbsences(): Observable<any>  { 
+		var postData = "function=getAbsences";
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);
+	}
+
 	private handleResponse(res: Response) {
 		if (res.status < 200 || res.status >= 300) {
 			throw new Error('Bad response status ' + res.status);

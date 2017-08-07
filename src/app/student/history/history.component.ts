@@ -27,6 +27,11 @@ export class HistoryComponent implements OnInit {
 			if(this.instanceId) {
 				this.selectedTabIndex = 1;
 				this.getCourseInstanceMeetings(this.instanceId);
+
+				// this.populiService.getAbsences().subscribe(response => {
+				// 	console.log(response);
+				// })
+
 			} else {
 				this.selectedTabIndex = 0;
 				this.router.navigate(['history']);
