@@ -5,3 +5,11 @@
 .grid-left-align > /deep/ figure {
      justify-content: flex-start !important;
  }
+
+.card-course {
+  transition: background-color 0.2s ease;
+}
+
+.card-course:hover {
+  background: rgba(224, 224, 224, 0.3);
+}

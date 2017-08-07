@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule, MdProgressBarModule, MdToolbarModule, MdTabsModule, MdIconModule, MdListModule, MdGridListModule, MdDialogModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule, MdProgressBarModule, MdToolbarModule, MdTabsModule, MdIconModule, MdListModule, MdGridListModule, MdDialogModule, MdProgressSpinnerModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 
@@ -48,7 +48,8 @@ export const routes: Routes = [
 		MdIconModule,
 		MdListModule,
 		MdGridListModule,
-		MdDialogModule
+		MdDialogModule,
+		MdProgressSpinnerModule
 	],
 	entryComponents: [ExcuseDialog],
 	exports: [RouterModule],

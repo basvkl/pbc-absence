@@ -15,15 +15,24 @@ export class HistoryComponent implements OnInit {
 	courses;
 	meetings;
 	selectedTabIndex = 0;
+	instanceId;
 	selectedCourse;
+	userFullName;
 
 	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) { }
 
 	ngOnInit() {
 		this.activatedRoute.params.subscribe((params: Params) => {
-			let instanceId = params['instanceId'];
-			this.selectedTabIndex = 1;
-			this.getCourseInstanceMeetings(instanceId);
+			this.instanceId = params['instanceId'];
+			if(this.instanceId) {
+				this.selectedTabIndex = 1;
+				this.getCourseInstanceMeetings(this.instanceId);
+			} else {
+				this.selectedTabIndex = 0;
+				this.router.navigate(['history']);
+			}
+
+			this.userFullName = this.populiService.getUserFullName();
 		});
 
 		this.populiService.getCurrentTerm().subscribe(response => {
@@ -51,7 +60,8 @@ export class HistoryComponent implements OnInit {
 		this.meetings = false;
 		this.selectedCourse = course;
 		let that = this;
-		this.router.navigate(['history/' + course.instanceid]);
+		this.getCourseInstanceMeetings(course.instanceid);
+		this.location.go('history/' + course.instanceid);
 	}
 
 	getCourseInstanceMeetings(instanceId): void {
@@ -59,24 +69,38 @@ export class HistoryComponent implements OnInit {
 			this.populiService.getCourseInstanceMeetings(instanceId).subscribe(response => {
 				console.log(response);
 				this.meetings = response.meeting;
-				for (var i = 0; i < this.meetings.length; i++) {
-					if (this.meetings[i].meetingid) {
-						//get attendance status
-					}
-				}
 			});
 		}
 	}
 
-	showExcuseModal(): void {
-		console.log("Always excuses");
+	showExcuseModal(meeting): void {
 		let dialogRef = this.dialog.open(ExcuseDialog, {
 			height: '400px',
 			width: '600px',
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
-			console.log(`Dialog result: ${result}`); // Pizza!
+		dialogRef.afterClosed().subscribe(reason => {
+			if(reason) {
+				console.log(reason);
+				console.log(meeting);
+				meeting.saving = true; 
+
+				console.log(this.instanceId);
+				console.log(meeting.start);
+				var meetingDate = meeting.start;
+				var meetingPeriod = meeting.start;
+
+				setTimeout(()=>{
+					delete meeting.saving;
+					meeting.saved = true;
+				})
+
+				// this.populiService.submitExcuse(this.instanceId, meeting.meetingid, meetingDate, meetingPeriod, reason).subscribe(response => {
+				// 	delete meeting.saving;
+				// 	meeting.saved = true;
+				// });
+			}
+			
 		});
 	}
 

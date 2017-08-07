@@ -39,10 +39,13 @@ export class LoginComponent implements OnInit {
 				this.model.loggingIn = false;
 				this.model.error = response.error;
 			} else {
-				console.log(response);
 				this.model.studentId = response.personId;
 				this.router.navigate(['history']);
 			}
+		}, err => {
+			this.model.loginBtnText = "Login";
+			this.model.loggingIn = false;
+			this.model.error = "Could not connect to server. Please try again in a minute.";
 		})
 	}
 

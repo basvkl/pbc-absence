@@ -82,3 +82,9 @@ body {
 .meeting-item {
     border-bottom: 1px solid #e2e2e2
 }
+
+.meeting-item .mat-spinner{
+    width: 30px;
+}
+
+

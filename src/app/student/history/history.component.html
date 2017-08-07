@@ -10,8 +10,8 @@
     <span>Courses for {{term.name}}</span>
     <span class="fill-space"></span>
     <span>
-		<button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout</button> 
-	</span>
+		  <button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout {{userFullName}} </button> 
+  	</span>
   </md-toolbar>
   <div style="padding:15px;padding-top:35px;">Select a course to view your attendance</div>
 
@@ -19,7 +19,7 @@
     <md-tab-group (selectedIndexChange)="selectedIndexChange($event)" [selectedIndex]="selectedTabIndex" class="history-tabs">
       <md-tab label="One">
         <div style="padding:10px;">
-          <md-card md-ripple *ngFor="let course of courses.my_course" (click)="selectCourse(course)">
+          <md-card md-ripple *ngFor="let course of courses.my_course" (click)="selectCourse(course)" style="cursor: pointer;" class="card-course">
             <md-grid-list cols="4" rows="1" rowHeight="45px">
               <md-grid-tile colspan="3" class="grid-left-align">
                 <div>
@@ -27,7 +27,9 @@
                   <p>{{course.abbrv}}</p>
                 </div>
               </md-grid-tile>
-              <md-grid-tile colspan="1"><md-icon>arrow_forward</md-icon></md-grid-tile>
+              <md-grid-tile colspan="1">
+                <md-icon>arrow_forward</md-icon>
+              </md-grid-tile>
             </md-grid-list>
           </md-card>
         </div>
@@ -40,19 +42,21 @@
           <h4>{{selectedCourse?.name}}</h4>
           <div>
             <md-list *ngIf="meetings">
-               <md-card > 
+              <md-card>
                 <md-grid-list cols="4" rows="1" rowHeight="40px" *ngFor="let meeting of meetings" class="meeting-item">
                   <md-grid-tile colspan="3" class="grid-left-align">
                     {{meeting.start | date:'mediumDate'}}<span style="color:gray;margin-left:10px;"> {{meeting.start | date:'shortTime'}}</span>
                   </md-grid-tile>
                   <md-grid-tile colspan="1">
                     <div style="float:right;" *ngIf="!meeting.meetingid">
-						<button md-button (click)="showExcuseModal()">Submit Excuse</button>
-					</div>
+                      <button *ngIf="!meeting.saving && !meeting.saved" md-button (click)="showExcuseModal(meeting)">Submit Excuse</button>
+                      <md-spinner *ngIf="meeting.saving"></md-spinner>
+                      <md-icon *ngIf="meeting.saved">check_circle</md-icon>
+                    </div>
                     <div style="float:right;" *ngIf="meeting.meetingid">No attendance has been set</div>
                   </md-grid-tile>
                 </md-grid-list>
-               </md-card> 
+              </md-card>
             </md-list>
           </div>
         </div>
