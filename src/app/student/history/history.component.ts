@@ -137,5 +137,7 @@ export class HistoryComponent implements OnInit {
 	templateUrl: 'excuse-dialog.html',
 })
 export class ExcuseDialog {
+	public excuse;
+
 	constructor(public dialogRef: MdDialogRef<ExcuseDialog>) { }
 }
