@@ -69,7 +69,7 @@ export class HistoryComponent implements OnInit {
 	getCourseInstanceMeetings(instanceId): void {
 		if (instanceId) {
 			this.populiService.getCourseInstanceMeetings(instanceId).subscribe(response => {
-				console.log(response);
+				// console.log(response);
 				this.meetings = response.meeting;
 			});
 			//also get submissions
@@ -83,11 +83,7 @@ export class HistoryComponent implements OnInit {
 	}
 
 	showExcuseModal(meeting): void {
-		let dialogRef = this.dialog.open(ExcuseDialog, {
-			height: '400px',
-			width: '600px',
-		});
-
+		let dialogRef = this.dialog.open(ExcuseDialog);
 		dialogRef.afterClosed().subscribe(reason => {
 			if(reason) {
 				console.log(reason);

@@ -69,4 +69,8 @@
     .student-form button{
         width:100%;
     }
+
+    .student-body {
+        padding-top: 0;
+    }
 }
