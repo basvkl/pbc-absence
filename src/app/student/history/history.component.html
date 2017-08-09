@@ -49,7 +49,7 @@
                   </md-grid-tile>
                   <md-grid-tile colspan="1">
                     <div style="float:right;" *ngIf="!meeting.meetingid">
-                      <button *ngIf="!meeting.saving && !meeting.saved" md-button (click)="showExcuseModal(meeting)">Submit <span class="hidden-xs">Excuse</span></button>
+                      <button *ngIf="!meeting.saving && !meeting.saved" md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
                       <md-spinner *ngIf="meeting.saving"></md-spinner>
                       <md-icon *ngIf="meeting.saved">check_circle</md-icon>
                     </div>
