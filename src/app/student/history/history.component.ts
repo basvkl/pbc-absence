@@ -27,11 +27,9 @@ export class HistoryComponent implements OnInit {
 			if(this.instanceId) {
 				this.selectedTabIndex = 1;
 				this.getCourseInstanceMeetings(this.instanceId);
-
-				// this.populiService.getAbsences().subscribe(response => {
-				// 	console.log(response);
-				// })
-
+				this.populiService.getCourseInstance(this.instanceId).subscribe(response => {
+					this.selectedCourse = response;
+				});
 			} else {
 				this.selectedTabIndex = 0;
 				this.router.navigate(['history']);
@@ -41,10 +39,8 @@ export class HistoryComponent implements OnInit {
 		});
 
 		this.populiService.getCurrentTerm().subscribe(response => {
-			//console.log(response);
 			this.term = response;
 			this.populiService.getMyCourses(this.term.termid).subscribe(response => {
-				// console.log(response);
 				response.my_course = response.my_course.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
 				this.courses = response;
 			});
@@ -65,6 +61,7 @@ export class HistoryComponent implements OnInit {
 		this.meetings = false;
 		this.selectedCourse = course;
 		let that = this;
+		this.instanceId = course.instanceid;
 		this.getCourseInstanceMeetings(course.instanceid);
 		this.location.go('history/' + course.instanceid);
 	}
@@ -75,6 +72,13 @@ export class HistoryComponent implements OnInit {
 				console.log(response);
 				this.meetings = response.meeting;
 			});
+			//also get submissions
+			console.log("Getting student submissions");
+			this.populiService.getPersonSubmissions().subscribe(response => {
+				console.log(response);
+				//Required: meetingId, instanceId otherwise can't match to record
+			});
+
 		}
 	}
 
@@ -92,18 +96,16 @@ export class HistoryComponent implements OnInit {
 
 				console.log(this.instanceId);
 				console.log(meeting.start);
-				var meetingDate = meeting.start;
-				var meetingPeriod = meeting.start;
+				var tmpDate = new Date(meeting.start);
+				var meetingDate = tmpDate.getFullYear() + "/" + tmpDate.getMonth() + "/" + tmpDate.getDate();
+				var meetingPeriod = this.getPeriodFromTime(meeting.start);
 
-				setTimeout(()=>{
+				this.populiService.submitExcuse(this.instanceId, meeting.meetingid, meetingDate, meetingPeriod, reason, this.selectedCourse.name).subscribe(response => {
 					delete meeting.saving;
 					meeting.saved = true;
-				})
-
-				// this.populiService.submitExcuse(this.instanceId, meeting.meetingid, meetingDate, meetingPeriod, reason).subscribe(response => {
-				// 	delete meeting.saving;
-				// 	meeting.saved = true;
-				// });
+				}, error => {
+					//console.log(error);
+				});
 			}
 			
 		});
@@ -111,6 +113,24 @@ export class HistoryComponent implements OnInit {
 
 	logout(): void {
 		this.populiService.logout();
+	}
+
+	getPeriodFromTime(datetime:string):number {
+		let date = new Date(datetime);
+		switch(date.getHours()) {
+			case 7:
+				return 1;
+			case 8:
+				return 2;
+			case 9:
+				return 3;
+			case 10:
+				return 4;
+			case 11:
+				return 5;
+			default:
+				return 0;
+		}
 	}
 
 }

@@ -9,7 +9,8 @@ import * as _ from 'lodash';
 @Injectable()
 export class PopuliService implements CanActivate {
 
-	private serverUrl = "http://localhost:8888/pbc/absence/ag2-server/";
+	//private serverUrl = "http://localhost:8888/pbc/absence/ag2-server/";
+	private serverUrl = "http://attendance.portlandbiblecollege.org/server/";
 	private token = null;
 	private personId = null;
 	private person = null;
@@ -56,26 +57,22 @@ export class PopuliService implements CanActivate {
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this.http.post(this.serverUrl, postData, { headers: headers })
-			.map(res => this.handleLoginResponse(res))
+			.map(res => {
+				if (res.status < 200 || res.status >= 300) {
+					throw new Error('Bad response status ' + res.status);
+				}
+				let body = res.json();
+				this.token = body.token;
+				this.personId = body.personId;
+				sessionStorage.setItem('token', JSON.stringify(body.token));
+				sessionStorage.setItem('personId', JSON.stringify(body.personId));
+
+				return this.getPerson(body.personId).map(response => {
+					this.person = response;
+					sessionStorage.setItem('person', JSON.stringify(response));
+				}).catch(this.handleError); 
+			})
 			.catch(this.handleError);
-	}
-
-	private handleLoginResponse(res: Response) {
-		if (res.status < 200 || res.status >= 300) {
-			throw new Error('Bad response status ' + res.status);
-		}
-		let body = res.json();
-		this.token = body.token;
-		this.personId = body.personId;
-		sessionStorage.setItem('token', JSON.stringify(body.token));
-		sessionStorage.setItem('personId', JSON.stringify(body.personId));
-
-		this.getPerson(body.personId).subscribe(response => {
-			this.person = response;
-			sessionStorage.setItem('person', JSON.stringify(response));
-		})
-
-		return body;
 	}
 
 	getPerson(personId: number) {
@@ -107,6 +104,15 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
+	getCourseInstance(instanceId): Observable<any> {
+		var postData = "function=getCourseInstance&token=" + this.token + "&instanceId=" + instanceId;
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);	
+	}
+
 	getCourseInstanceMeetings(instanceId): Observable<any>  { 
 		var postData = "function=getCourseInstanceMeetings&token=" + this.token + "&instanceId=" + instanceId;
 		var headers = new Headers();
@@ -116,24 +122,30 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
-	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason): Observable<any>  { 
+	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason, className): Observable<any>  { 
 		var params = {
-			instanceId: instanceId,
-			meetingId: meetingId,
 			personId: this.personId,
+			meetingId: meetingId || 10,
+			reason: reason,
 			firstName: this.person.first,
 			lastName: this.person.last,
+			className: className + " [" + instanceId + "]",
 			period: meetingPeriod,
 			date: meetingDate,
-			reason: reason,
+			absenceType: "Absent",
 			email: _.find(this.person.email, {is_primary: "1"})['address'] || "",
-			phone: _.find(this.person.phone, {is_primary: "1"})['number'] || ""
- 
+			phone: _.find(this.person.phone, {is_primary: "1"})['number'] || "",
+			instanceId: instanceId
 		}
 
 		console.log(params); 
 
 		var postData = "function=submitExcuse&token=" + this.token;
+		_.forEach(params, function(value, key) {
+			postData += "&" + key + "=" + encodeURIComponent(value);
+		});
+
+		//console.log(postData);
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.serverUrl, postData, { headers: headers })
@@ -141,8 +153,8 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
-	getAbsences(): Observable<any>  { 
-		var postData = "function=getAbsences";
+	getPersonSubmissions(): Observable<any>  { 
+		var postData = "function=getPersonSubmissions&personId=" + this.personId;
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.serverUrl, postData, { headers: headers })

@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
 				this.model.error = response.error;
 			} else {
 				this.model.studentId = response.personId;
-				this.router.navigate(['history']);
+				this.router.navigate(['history']); 
 			}
 		}, err => {
 			this.model.loginBtnText = "Login";
