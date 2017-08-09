@@ -18,11 +18,11 @@ export class PopuliService implements CanActivate {
 	private cachedMeetings = {};
 
 	constructor(private http: Http, private router: Router) {  
+		console.log(sessionStorage);
 		if(sessionStorage.token && sessionStorage.personId && sessionStorage.person){
 			this.token = JSON.parse(sessionStorage.token);
 			this.personId = JSON.parse(sessionStorage.personId);
 			this.person = JSON.parse(sessionStorage.person);
-			console.log(this.person);
 		}
 	}
 
@@ -57,7 +57,7 @@ export class PopuliService implements CanActivate {
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this.http.post(this.serverUrl, postData, { headers: headers })
-			.map(res => {
+			.flatMap(res => {
 				if (res.status < 200 || res.status >= 300) {
 					throw new Error('Bad response status ' + res.status);
 				}
@@ -66,11 +66,7 @@ export class PopuliService implements CanActivate {
 				this.personId = body.personId;
 				sessionStorage.setItem('token', JSON.stringify(body.token));
 				sessionStorage.setItem('personId', JSON.stringify(body.personId));
-
-				return this.getPerson(body.personId).map(response => {
-					this.person = response;
-					sessionStorage.setItem('person', JSON.stringify(response));
-				}).catch(this.handleError); 
+				return this.getPerson(body.personId);
 			})
 			.catch(this.handleError);
 	}
@@ -81,7 +77,15 @@ export class PopuliService implements CanActivate {
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this.http.post(this.serverUrl, postData, { headers: headers })
-			.map(res => this.handleResponse(res))
+			.map(res => {
+				if (res.status < 200 || res.status >= 300) {
+					throw new Error('Bad response status ' + res.status);
+				}	
+				let body = res.json();		
+				this.person = body;
+				sessionStorage.setItem('person', JSON.stringify(this.person));
+				return body; 
+			})
 			.catch(this.handleError);
 	}
 

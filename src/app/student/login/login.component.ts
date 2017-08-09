@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 				this.model.loggingIn = false;
 				this.model.error = response.error;
 			} else {
-				this.model.studentId = response.personId;
+				console.log(response);
 				this.router.navigate(['history']); 
 			}
 		}, err => {
