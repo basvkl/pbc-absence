@@ -18,8 +18,16 @@ export class HistoryComponent implements OnInit {
 	instanceId;
 	selectedCourse;
 	userFullName;
+	statusIcon
 
-	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) { }
+	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) {
+		this.statusIcon = {
+			"PENDING": "schedule",
+			"APPROVED":"check_circle",
+			"RESUBMIT":"refresh",
+			"DENIED":"cancel"
+		}; 
+	}
 
 	ngOnInit() {
 		this.activatedRoute.params.subscribe((params: Params) => {
@@ -70,13 +78,22 @@ export class HistoryComponent implements OnInit {
 		if (instanceId) {
 			this.populiService.getCourseInstanceMeetings(instanceId).subscribe(response => {
 				// console.log(response);
-				this.meetings = response.meeting;
-			});
-			//also get submissions
-			console.log("Getting student submissions");
-			this.populiService.getPersonSubmissions().subscribe(response => {
-				console.log(response);
-				//Required: meetingId, instanceId otherwise can't match to record
+				let meetings = response.meeting;
+				//also get submissions
+				console.log("Getting student submissions");
+				this.populiService.getPersonSubmissions().subscribe(response => {
+					console.log(response);
+					meetings.map(meeting => {
+						for (var i= 0; i < response.length; i++) {
+							if (response[i].meetingId === meeting.meetingid) {
+								meeting.status = response[i].status != null ? response[i].status : "PENDING"; 
+							}
+						}
+					});
+
+					this.meetings = meetings;
+					//Required: meetingId, instanceId otherwise can't match to record
+				});
 			});
 
 		}
@@ -86,15 +103,16 @@ export class HistoryComponent implements OnInit {
 		let dialogRef = this.dialog.open(ExcuseDialog);
 		dialogRef.afterClosed().subscribe(reason => {
 			if(reason) {
-				console.log(reason);
-				console.log(meeting);
 				meeting.saving = true; 
-
-				console.log(this.instanceId);
-				console.log(meeting.start);
 				var tmpDate = new Date(meeting.start);
 				var meetingDate = tmpDate.getFullYear() + "/" + tmpDate.getMonth() + "/" + tmpDate.getDate();
 				var meetingPeriod = this.getPeriodFromTime(meeting.start);
+
+				if(!meeting.meetingid){
+					delete meeting.saving;
+					meeting.saved = false;
+					return window.alert("Attendance has not been set");
+				}
 
 				this.populiService.submitExcuse(this.instanceId, meeting.meetingid, meetingDate, meetingPeriod, reason, this.selectedCourse.name).subscribe(response => {
 					delete meeting.saving;

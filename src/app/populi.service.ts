@@ -129,7 +129,7 @@ export class PopuliService implements CanActivate {
 	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason, className): Observable<any>  { 
 		var params = {
 			personId: this.personId,
-			meetingId: meetingId || 10,
+			meetingId: meetingId,
 			reason: reason,
 			firstName: this.person.first,
 			lastName: this.person.last,

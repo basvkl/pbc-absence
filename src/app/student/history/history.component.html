@@ -48,12 +48,13 @@
                     {{meeting.start | date:'mediumDate'}}<span style="color:gray;margin-left:10px;"> {{meeting.start | date:'shortTime'}}</span>
                   </md-grid-tile>
                   <md-grid-tile colspan="1">
-                    <div style="float:right;" *ngIf="!meeting.meetingid">
-                      <button *ngIf="!meeting.saving && !meeting.saved" md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
+                    <div style="float:right;" *ngIf="meeting.meetingid">
+                      <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status" md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
                       <md-spinner *ngIf="meeting.saving"></md-spinner>
-                      <md-icon *ngIf="meeting.saved">check_circle</md-icon>
+                       <md-icon *ngIf="meeting.saved">check_cirle</md-icon> 
+                       <md-icon *ngIf="meeting.status">{{statusIcon[meeting.status]}}</md-icon> 
                     </div>
-                    <div style="float:right;" *ngIf="meeting.meetingid">No attendance has been set</div>
+                    <div style="float:right;" *ngIf="!meeting.meetingid"><span class="hidden-xs">Attendance not yet taken</span><span class="visible-xs">No attendance</span></div>
                   </md-grid-tile>
                 </md-grid-list>
               </md-card>
