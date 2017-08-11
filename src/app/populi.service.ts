@@ -18,7 +18,6 @@ export class PopuliService implements CanActivate {
 	private cachedMeetings = {};
 
 	constructor(private http: Http, private router: Router) {  
-		console.log(sessionStorage);
 		if(sessionStorage.token && sessionStorage.personId && sessionStorage.person){
 			this.token = JSON.parse(sessionStorage.token);
 			this.personId = JSON.parse(sessionStorage.personId);
