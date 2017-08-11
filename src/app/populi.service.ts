@@ -61,6 +61,9 @@ export class PopuliService implements CanActivate {
 					throw new Error('Bad response status ' + res.status);
 				}
 				let body = res.json();
+				if(body.error) {
+					return Observable.throw(body.error);
+				}
 				this.token = body.token;
 				this.personId = body.personId;
 				sessionStorage.setItem('token', JSON.stringify(body.token));
