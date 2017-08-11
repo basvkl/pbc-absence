@@ -36,9 +36,9 @@
       </md-tab>
       <md-tab label="Two">
         <div style="padding:10px;">
-          <button md-icon-button (click)="goBack()">
-			<md-icon>arrow_back</md-icon> Courses
-		  </button>
+          <button md-icon-button (click)="goBack()" style="min-width: 80px;">
+			      <md-icon>arrow_back</md-icon> Courses
+		      </button>
           <h4>{{selectedCourse?.name}}</h4>
           <div>
             <md-list *ngIf="meetings">
