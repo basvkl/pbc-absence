@@ -18,14 +18,14 @@ export class HistoryComponent implements OnInit {
 	instanceId;
 	selectedCourse;
 	userFullName;
-	statusIcon
+	status;
 
 	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) {
-		this.statusIcon = {
-			"PENDING": "schedule",
-			"APPROVED":"check_circle",
-			"RESUBMIT":"refresh",
-			"DENIED":"cancel"
+		this.status = {
+			"PENDING": {icon: "schedule", toolTip: "Pending approval"},
+			"APPROVED": {icon: "check_circle", toolTip: "Approved"},
+			"RESUBMIT": {icon: "refresh", toolTip: "Please Resubmit"}, //Should never happen
+			"DENIED": {icon: "cancel", toolTip: "Request Denied"},
 		}; 
 	}
 

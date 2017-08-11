@@ -52,7 +52,7 @@
                       <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status" md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
                       <md-spinner *ngIf="meeting.saving"></md-spinner>
                        <md-icon *ngIf="meeting.saved">schedule</md-icon> 
-                       <md-icon *ngIf="meeting.status">{{statusIcon[meeting.status]}}</md-icon> 
+                       <md-icon mdTooltip="Status: {{status[meeting.status]?.toolTip}}" *ngIf="meeting.status">{{status[meeting.status]?.icon}}</md-icon> 
                     </div>
                     <div style="float:right;" *ngIf="!meeting.meetingid"><span class="hidden-xs">Attendance not yet taken</span><span class="visible-xs">No attendance</span></div>
                   </md-grid-tile>
