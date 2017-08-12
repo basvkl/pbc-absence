@@ -49,8 +49,13 @@ export class HistoryComponent implements OnInit {
 		this.populiService.getCurrentTerm().subscribe(response => {
 			this.term = response;
 			this.populiService.getMyCourses(this.term.termid).subscribe(response => {
-				response.my_course = response.my_course.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
-				this.courses = response;
+				if(response.my_course && response.my_course instanceof Array) {
+					response.my_course = response.my_course.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
+					this.courses = response;
+				} else {
+					this.courses = {my_course: [response.my_course]};
+				}
+				
 			});
 		});
 	}
@@ -80,9 +85,7 @@ export class HistoryComponent implements OnInit {
 				// console.log(response);
 				let meetings = response.meeting;
 				//also get submissions
-				console.log("Getting student submissions");
 				this.populiService.getPersonSubmissions().subscribe(response => {
-					console.log(response);
 					meetings.map(meeting => {
 						for (var i= 0; i < response.length; i++) {
 							if (response[i].meetingId === meeting.meetingid) {

@@ -36,7 +36,7 @@
       </md-tab>
       <md-tab label="Two">
         <div style="padding:10px;">
-          <button md-icon-button (click)="goBack()" style="min-width: 80px;">
+          <button md-icon-button (click)="goBack()" style="min-width: 85px;">
 			      <md-icon>arrow_back</md-icon> Courses
 		      </button>
           <h4>{{selectedCourse?.name}}</h4>
@@ -49,14 +49,23 @@
                   </md-grid-tile>
                   <md-grid-tile colspan="1">
                     <div style="float:right;" *ngIf="meeting.meetingid">
-                      <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status" md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
+                      <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status" md-raised-button md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
                       <md-spinner *ngIf="meeting.saving"></md-spinner>
                        <md-icon *ngIf="meeting.saved">schedule</md-icon> 
                        <md-icon mdTooltip="Status: {{status[meeting.status]?.toolTip}}" *ngIf="meeting.status">{{status[meeting.status]?.icon}}</md-icon> 
                     </div>
-                    <div style="float:right;" *ngIf="!meeting.meetingid"><span class="hidden-xs">Attendance not yet taken</span><span class="visible-xs">No attendance</span></div>
+                    <div style="float:right;" *ngIf="!meeting.meetingid" mdTooltip="No attendance has been set by the teacher" ><md-icon>slow_motion_video</md-icon> </div>
                   </md-grid-tile>
                 </md-grid-list>
+                <div style="margin-top:20px">
+                    Legend
+                    <md-list>
+                        <md-list-item> <md-icon class="legend-icon">schedule</md-icon>  Pending approval </md-list-item>
+                        <md-list-item> <md-icon class="legend-icon">check_circle</md-icon>  Excuse approved  </md-list-item>
+                        <md-list-item> <md-icon class="legend-icon">cancel</md-icon> Excuse denied  </md-list-item>
+                        <md-list-item> <md-icon class="legend-icon">slow_motion_video</md-icon> No attendance has been set </md-list-item>
+                      </md-list>
+                </div>
               </md-card>
             </md-list>
           </div>
