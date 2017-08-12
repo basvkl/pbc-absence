@@ -13,7 +13,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './student/login/login.component';
 import { HistoryComponent, ExcuseDialog } from './student/history/history.component';
 import { PopuliService } from './populi.service';
+import {enableProdMode} from '@angular/core';
 
+enableProdMode();
 
 // Route Configuration
 export const routes: Routes = [
