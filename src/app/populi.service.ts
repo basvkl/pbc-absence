@@ -128,6 +128,15 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
+	getCourseInstanceStudentAttendance(instanceId): Observable<any> {
+		var postData = "function=getCourseInstanceStudentAttendance&token=" + this.token + "&instanceId=" + instanceId + "&personId=" + this.personId;
+		var headers = new Headers();
+		headers.append('Content-Type', 'application/x-www-form-urlencoded');
+		return this.http.post(this.serverUrl, postData, { headers: headers })
+			.map(res => this.handleResponse(res))
+			.catch(this.handleError);
+	}
+
 	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason, className): Observable<any>  { 
 		var params = {
 			personId: this.personId,

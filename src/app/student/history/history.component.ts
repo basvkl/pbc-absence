@@ -85,6 +85,11 @@ export class HistoryComponent implements OnInit {
 				// console.log(response);
 				let meetings = response.meeting;
 				//also get submissions
+
+				this.populiService.getCourseInstanceStudentAttendance(instanceId).subscribe(response =>{
+					console.log(response);
+				});
+
 				this.populiService.getPersonSubmissions().subscribe(response => {
 					meetings.map(meeting => {
 						for (var i= 0; i < response.length; i++) {
