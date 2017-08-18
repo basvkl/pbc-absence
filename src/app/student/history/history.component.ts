@@ -3,6 +3,7 @@ import { PopuliService } from '../../populi.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Location } from '@angular/common';
+import * as _ from 'lodash';
 
 @Component({
 	selector: 'app-history',
@@ -82,12 +83,15 @@ export class HistoryComponent implements OnInit {
 	getCourseInstanceMeetings(instanceId): void {
 		if (instanceId) {
 			this.populiService.getCourseInstanceMeetings(instanceId).subscribe(response => {
-				// console.log(response);
 				let meetings = response.meeting;
-				//also get submissions
-
 				this.populiService.getCourseInstanceStudentAttendance(instanceId).subscribe(response =>{
-					console.log(response);
+					let attendance = response.attendee;
+					meetings.map(meeting =>{
+						var attendedMeeting:any =  _.find(attendance, {meetingid: meeting.meetingid});
+						if(attendedMeeting) {
+							meeting.attendance = attendedMeeting.status;
+						}
+					});
 				});
 
 				this.populiService.getPersonSubmissions().subscribe(response => {
@@ -100,7 +104,6 @@ export class HistoryComponent implements OnInit {
 					});
 
 					this.meetings = meetings;
-					//Required: meetingId, instanceId otherwise can't match to record
 				});
 			});
 

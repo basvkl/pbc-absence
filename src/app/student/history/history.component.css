@@ -6,6 +6,18 @@
   justify-content: flex-start !important;
 }
 
+.loading-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.meeting-date,
+.meeting-attendance-status {
+  color: gray;
+  margin-left: 10px;
+}
+
 .card-course {
   transition: background-color 0.2s ease;
 }
@@ -21,5 +33,15 @@
 @media only screen and (max-width: 500px) {
   .btn-username {
     display: none;
+  }
+  .meeting-date {
+    display: none;
+  }
+  .course-name  p{
+    display: none;
+  }
+
+  .course-name h4 {
+	font-size: 3.5vw;
   }
 }
