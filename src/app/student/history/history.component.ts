@@ -89,12 +89,16 @@ export class HistoryComponent implements OnInit {
 				let meetings = response.meeting;
 				this.populiService.getCourseInstanceStudentAttendance(instanceId).subscribe(response =>{
 					let attendance = response.attendee;
+					if(!(attendance instanceof Array)) {
+						attendance = [response.attendee];
+					}
 					meetings.map(meeting =>{
 						var attendedMeeting:any =  _.find(attendance, {meetingid: meeting.meetingid});
-						// meeting.start = moment(meeting.start).subtract(30, "days").toDate(); //Testing 
+						// meeting.start = moment(meeting.start).subtract(19, "days").toDate(); //Testing 
 						if(attendedMeeting) {
 							if(moment(meeting.start).isBefore(this.cutoffDate)){
 								meeting.passedCutoff = true;
+								console.log("nope");
 							}
 							meeting.attendance = attendedMeeting.status;
 						}
@@ -109,7 +113,6 @@ export class HistoryComponent implements OnInit {
 							}
 						}
 					});
-
 					this.meetings = meetings;
 				});
 			});
@@ -140,7 +143,6 @@ export class HistoryComponent implements OnInit {
 					//console.log(error);
 				});
 			}
-			
 		});
 	}
 
