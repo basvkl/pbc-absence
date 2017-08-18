@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Location } from '@angular/common';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-history',
@@ -20,6 +21,7 @@ export class HistoryComponent implements OnInit {
 	selectedCourse;
 	userFullName;
 	status;
+	cutoffDate;
 
 	constructor(private populiService: PopuliService, private activatedRoute: ActivatedRoute, private router: Router, private location: Location, public dialog: MdDialog) {
 		this.status = {
@@ -28,6 +30,7 @@ export class HistoryComponent implements OnInit {
 			"RESUBMIT": {icon: "refresh", toolTip: "Please Resubmit"}, //Should never happen
 			"DENIED": {icon: "cancel", toolTip: "Request Denied"},
 		}; 
+		this.cutoffDate = moment().hour(0).minute(0).second(0).millisecond(0).subtract(14, 'days');
 	}
 
 	ngOnInit() {
@@ -88,7 +91,11 @@ export class HistoryComponent implements OnInit {
 					let attendance = response.attendee;
 					meetings.map(meeting =>{
 						var attendedMeeting:any =  _.find(attendance, {meetingid: meeting.meetingid});
+						// meeting.start = moment(meeting.start).subtract(30, "days").toDate(); //Testing 
 						if(attendedMeeting) {
+							if(moment(meeting.start).isBefore(this.cutoffDate)){
+								meeting.passedCutoff = true;
+							}
 							meeting.attendance = attendedMeeting.status;
 						}
 					});
@@ -112,6 +119,7 @@ export class HistoryComponent implements OnInit {
 
 	showExcuseModal(meeting): void {
 		let dialogRef = this.dialog.open(ExcuseDialog);
+		dialogRef.componentInstance.meeting = meeting;
 		dialogRef.afterClosed().subscribe(reason => {
 			if(reason) {
 				meeting.saving = true; 
@@ -167,6 +175,7 @@ export class HistoryComponent implements OnInit {
 })
 export class ExcuseDialog {
 	public excuse;
+	public meeting;
 
 	constructor(public dialogRef: MdDialogRef<ExcuseDialog>) { }
 }

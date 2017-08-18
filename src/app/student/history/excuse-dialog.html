@@ -1,10 +1,13 @@
 <h1 md-dialog-title>Submit Excuse</h1>
 <div md-dialog-content>
-  <md-input-container class="full-width">
+  <md-input-container class="full-width" *ngIf="!meeting.passedCutoff">
     <textarea mdInput mdAutosizeMinRows rows="10" cols="200" style="width:100%;" [(ngModel)]="excuse" placeholder="Please state the reason for your absense or tardiness" id="description"></textarea>
   </md-input-container>
+  <p *ngIf="meeting.passedCutoff">
+      You have exceeded the maximum number of days to submit an excuse request for this instance.
+  </p>
 </div>
 <div md-dialog-actions>
-  <button [disabled]="!excuse" md-button md-dialog-close="{{excuse}}">Submit</button>
+  <button [disabled]="!excuse" *ngIf="!meeting.passedCutoff" md-button md-dialog-close="{{excuse}}">Submit</button>
   <button md-button md-dialog-close>Close</button>
 </div>
