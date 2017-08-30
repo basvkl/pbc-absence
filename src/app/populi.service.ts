@@ -148,8 +148,8 @@ export class PopuliService implements CanActivate {
 			period: meetingPeriod,
 			date: meetingDate,
 			absenceType: "Absent",
-			email: _.find(this.person.email, {is_primary: "1"})['address'] || "",
-			phone: _.find(this.person.phone, {is_primary: "1"})['number'] || "",
+			email: _.find(this.person.email, {is_primary: "1"}) ? _.find(this.person.email, {is_primary: "1"})['address'] : "",
+			phone: _.find(this.person.phone, {is_primary: "1"}) ? _.find(this.person.phone, {is_primary: "1"})['number'] : "",
 			instanceId: instanceId
 		}
 
