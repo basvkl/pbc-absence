@@ -56,8 +56,10 @@ export class HistoryComponent implements OnInit {
 				if(response.my_course && response.my_course instanceof Array) {
 					response.my_course = response.my_course.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
 					this.courses = response;
-				} else {
+				} else if(response.my_course) {
 					this.courses = {my_course: [response.my_course]};
+				} else {
+					this.courses = {};
 				}
 				
 			});

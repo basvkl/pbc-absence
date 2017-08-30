@@ -10,12 +10,12 @@
     <span>Courses for {{term.name}}</span>
     <span class="fill-space"></span>
     <span>
-		  <button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout <span class="hidden-xs"> {{userFullName}} </span></button> 
-  	</span>
+		  <button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout <span class="hidden-xs"> {{userFullName}} </span></button>
+    </span>
   </md-toolbar>
   <!-- <div style="padding:15px;padding-top:35px;">Select a course to view your attendance</div> -->
 
-  <div style="padding:10px;" *ngIf="courses">
+  <div style="padding:10px;" *ngIf="courses && courses.my_course">
     <md-tab-group (selectedIndexChange)="selectedIndexChange($event)" [selectedIndex]="selectedTabIndex" class="history-tabs">
       <md-tab label="One">
         <div style="padding:10px;">
@@ -52,22 +52,29 @@
                   </md-grid-tile>
                   <md-grid-tile colspan="2">
                     <div style="float:right;" *ngIf="meeting.meetingid">
-                      <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status &&  meeting.attendance != 'PRESENT'" md-raised-button md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
+                      <button *ngIf="!meeting.saving && !meeting.saved && !meeting.status &&  meeting.attendance != 'PRESENT'" md-raised-button
+                        md-button (click)="showExcuseModal(meeting)"><span>Submit <span class="hidden-xs">Excuse</span></span></button>
                       <md-spinner *ngIf="meeting.saving"></md-spinner>
-                       <md-icon *ngIf="meeting.saved">schedule</md-icon> 
-                       <md-icon mdTooltip="Status: {{status[meeting.status]?.toolTip}}" *ngIf="meeting.status">{{status[meeting.status]?.icon}}</md-icon> 
+                      <md-icon *ngIf="meeting.saved">schedule</md-icon>
+                      <md-icon mdTooltip="Status: {{status[meeting.status]?.toolTip}}" *ngIf="meeting.status">{{status[meeting.status]?.icon}}</md-icon>
                     </div>
-                    <div style="float:right;" *ngIf="!meeting.meetingid" mdTooltip="No attendance has been set by the teacher" ><md-icon>slow_motion_video</md-icon> </div>
+                    <div style="float:right;" *ngIf="!meeting.meetingid" mdTooltip="No attendance has been set by the teacher">
+                      <md-icon>slow_motion_video</md-icon>
+                    </div>
                   </md-grid-tile>
                 </md-grid-list>
                 <div style="margin-top:20px">
-                    Legend
-                    <md-list>
-                        <md-list-item> <md-icon class="legend-icon">schedule</md-icon>  Pending approval </md-list-item>
-                        <md-list-item> <md-icon class="legend-icon">check_circle</md-icon>  Excuse approved  </md-list-item>
-                        <md-list-item> <md-icon class="legend-icon">cancel</md-icon> Excuse denied  </md-list-item>
-                        <md-list-item> <md-icon class="legend-icon">slow_motion_video</md-icon> No attendance has been set </md-list-item>
-                      </md-list>
+                  Legend
+                  <md-list>
+                    <md-list-item>
+                      <md-icon class="legend-icon">schedule</md-icon> Pending approval </md-list-item>
+                    <md-list-item>
+                      <md-icon class="legend-icon">check_circle</md-icon> Excuse approved </md-list-item>
+                    <md-list-item>
+                      <md-icon class="legend-icon">cancel</md-icon> Excuse denied </md-list-item>
+                    <md-list-item>
+                      <md-icon class="legend-icon">slow_motion_video</md-icon> No attendance has been set </md-list-item>
+                  </md-list>
                 </div>
               </md-card>
             </md-list>
@@ -76,5 +83,8 @@
       </md-tab>
     </md-tab-group>
 
+  </div>
+  <div *ngIf="courses && !courses.my_course">
+	  <p class="no-courses">It seems you are not registered for any courses. If this is incorrect please contact your student advisor.</p>
   </div>
 </div>

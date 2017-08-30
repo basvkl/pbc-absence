@@ -12,6 +12,11 @@
   width: 100%;
 }
 
+.no-courses {
+  padding:20px;
+  margin:auto;
+}
+
 .meeting-date,
 .meeting-attendance-status {
   color: gray;

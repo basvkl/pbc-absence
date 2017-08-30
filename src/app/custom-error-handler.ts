@@ -1,7 +1,10 @@
-import { ErrorHandler } from '@angular/core';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Http, Response, Headers } from '@angular/http';
+import * as StackTrace from 'stacktrace-js';
 
-export class CustomErrorHandler extends ErrorHandler{
+@Injectable()
+export class CustomErrorHandler extends ErrorHandler {
     private serverUrl = "http://attendance.portlandbiblecollege.org/server/";
 
     constructor(private http: Http) {
@@ -13,13 +16,21 @@ export class CustomErrorHandler extends ErrorHandler{
 
     handleError(error) {
         console.error(error);
-        
-        var postData = "function=error&message=" + error;
-		var headers = new Headers();
-		headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        this.http.post(this.serverUrl, postData, { headers: headers })
-        .map(res => {
-           console.log(res);
+
+        StackTrace.fromError(error).then(stackframes => {
+            const stackString = stackframes
+                .splice(0, 20)
+                .map(function (sf) {
+                    return sf.toString();
+                }).join('\n');
+
+            let message = encodeURIComponent(error) + "\r\n\r\n" + encodeURIComponent(stackString);
+            let postData = "function=error&message=" + message;
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/x-www-form-urlencoded')
+
+            const req = this.http.post(this.serverUrl, postData, { headers: headers });
+            req.subscribe();
         });
     }
 }
