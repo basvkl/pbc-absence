@@ -4,7 +4,7 @@ import { MdButtonModule, MdCardModule, MdInputModule, MdTableModule, MdProgressB
 import { CdkTableModule } from '@angular/cdk';
 
 
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -13,7 +13,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './student/login/login.component';
 import { HistoryComponent, ExcuseDialog } from './student/history/history.component';
 import { PopuliService } from './populi.service';
-import {enableProdMode} from '@angular/core';
+import { enableProdMode } from '@angular/core';
+
+import { CustomErrorHandler } from './custom-error-handler';
+
 
 enableProdMode();
 
@@ -56,7 +59,7 @@ export const routes: Routes = [
 	],
 	entryComponents: [ExcuseDialog],
 	exports: [RouterModule],
-	providers: [PopuliService],
+	providers: [PopuliService, { provide: ErrorHandler, useClass: CustomErrorHandler }],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
