@@ -16,6 +16,8 @@ import { enableProdMode } from '@angular/core';
 
 import { CustomErrorHandler } from './custom-error-handler';
 
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 enableProdMode();
 

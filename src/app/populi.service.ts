@@ -181,6 +181,9 @@ export class PopuliService implements CanActivate {
 		if (res.status < 200 || res.status >= 300) {
 			throw new Error('Bad response status ' + res.status);
 		}	
+		if (!res['_body']) {
+			return;
+		}
 		let body = res.json();		
 		return body;
 	}
