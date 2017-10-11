@@ -44,7 +44,12 @@ export class LoginComponent implements OnInit {
 		}, err => {
 			this.model.loginBtnText = "Login";
 			this.model.loggingIn = false;
-			this.model.error = err || "Could not connect to server. Please try again in a minute.";
+			if(err._body){
+				let errorBody = JSON.parse(err._body).error;
+				this.model.error = errorBody;
+			} else {
+				this.model.error = err || "Could not connect to server. Please try again in a minute.";
+			}
 		})
 	}
 
