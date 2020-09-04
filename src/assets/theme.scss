@@ -1,0 +1,76 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$gift-tool-theme: (
+  50: #121C30,
+  100: #121C30,
+  200: #121C30,
+  300: #121C30,
+  400: #121C30,
+  500: #121C30,
+  600: #121C30,
+  700: #121C30,
+  800: #121C30,
+  900: #121C30,
+  A100: #121C30,
+  A200: #121C30,
+  A400: #121C30,
+  A700: #121C30,
+  contrast: (
+    50: #fff,
+    100: #fff,
+    200: #fff,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #fff,
+    A200: #fff,
+    A400: #fff,
+    A700: #fff,
+  )
+);
+
+$gift-tool-theme-accent: (
+  50: #E54226,
+  100: #E54226,
+  200: #E54226,
+  300: #E54226,
+  400: #E54226,
+  500: #E54226,
+  600: #E54226,
+  700: #E54226,
+  800: #E54226,
+  900: #E54226,
+  A100: #E54226,
+  A200: #E54226,
+  A400: #E54226,
+  A700: #E54226,
+  contrast: (
+    50: #fff,
+    100: #fff,
+    200: #fff,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #fff,
+    A200: #fff,
+    A400: #fff,
+    A700: #fff,
+  )
+);
+
+$app-primary: mat-palette($gift-tool-theme);
+$app-accent: mat-palette($gift-tool-theme-accent);
+$app-warn: mat-palette($mat-red);
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($app-theme);

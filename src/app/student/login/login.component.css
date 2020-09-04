@@ -17,9 +17,10 @@
 .student-login-form img {
     display: block;
     margin: 0 auto;
-    max-width: 200px;
+    max-width: 300px;
     max-height: 200px;
-    margin-bottom:20px;
+    margin-bottom:40px;
+    margin-top:40px;
 }
 
 .student-login-error {

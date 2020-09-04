@@ -10,14 +10,14 @@ import * as _ from 'lodash';
 export class PopuliService implements CanActivate {
 
 	//private serverUrl = "http://localhost:8888/pbc/absence/ag2-server/";
-	private serverUrl = "http://attendance.portlandbiblecollege.org/server/";
+	private serverUrl = "https://attendance.portlandbiblecollege.org/server/";
 	private token = null;
 	private personId = null;
 	private person = null;
 
 	private cachedMeetings = {};
 
-	constructor(private http: Http, private router: Router) {  
+	constructor(private http: Http, private router: Router) {
 		if(sessionStorage.token && sessionStorage.personId && sessionStorage.person){
 			this.token = JSON.parse(sessionStorage.token);
 			this.personId = JSON.parse(sessionStorage.personId);
@@ -82,11 +82,11 @@ export class PopuliService implements CanActivate {
 			.map(res => {
 				if (res.status < 200 || res.status >= 300) {
 					throw new Error('Bad response status ' + res.status);
-				}	
-				let body = res.json();		
+				}
+				let body = res.json();
 				this.person = body;
 				sessionStorage.setItem('person', JSON.stringify(this.person));
-				return body; 
+				return body;
 			})
 			.catch(this.handleError);
 	}
@@ -116,10 +116,10 @@ export class PopuliService implements CanActivate {
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
 		return this.http.post(this.serverUrl, postData, { headers: headers })
 			.map(res => this.handleResponse(res))
-			.catch(this.handleError);	
+			.catch(this.handleError);
 	}
 
-	getCourseInstanceMeetings(instanceId): Observable<any>  { 
+	getCourseInstanceMeetings(instanceId): Observable<any>  {
 		var postData = "function=getCourseInstanceMeetings&token=" + this.token + "&instanceId=" + instanceId;
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -137,7 +137,7 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
-	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason, className): Observable<any>  { 
+	submitExcuse(instanceId, meetingId, meetingDate, meetingPeriod, reason, className): Observable<any>  {
 		var params = {
 			personId: this.personId,
 			meetingId: meetingId,
@@ -153,7 +153,7 @@ export class PopuliService implements CanActivate {
 			instanceId: instanceId
 		}
 
-		console.log(params); 
+		console.log(params);
 
 		var postData = "function=submitExcuse&token=" + this.token;
 		_.forEach(params, function(value, key) {
@@ -168,7 +168,7 @@ export class PopuliService implements CanActivate {
 			.catch(this.handleError);
 	}
 
-	getPersonSubmissions(): Observable<any>  { 
+	getPersonSubmissions(): Observable<any>  {
 		var postData = "function=getPersonSubmissions&personId=" + this.personId;
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -180,11 +180,11 @@ export class PopuliService implements CanActivate {
 	private handleResponse(res: Response) {
 		if (res.status < 200 || res.status >= 300) {
 			throw new Error('Bad response status ' + res.status);
-		}	
+		}
 		if (!res['_body']) {
 			return;
 		}
-		let body = res.json();		
+		let body = res.json();
 		return body;
 	}
 

@@ -10,7 +10,7 @@
     <span>Courses for {{term.name}}</span>
     <span class="fill-space"></span>
     <span>
-		  <button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout <span class="hidden-xs"> {{userFullName}} </span></button>
+		  <button md-raised-button (click)="logout()"><md-icon style="vertical-align: middle;">power_settings_new</md-icon> Logout</button>
     </span>
   </md-toolbar>
   <!-- <div style="padding:15px;padding-top:35px;">Select a course to view your attendance</div> -->
@@ -20,7 +20,7 @@
       <md-tab label="One">
         <div style="padding:10px;">
           <md-card md-ripple *ngFor="let course of courses.my_course" (click)="selectCourse(course)" style="cursor: pointer;" class="card-course">
-            <md-grid-list cols="4" rows="1" rowHeight="45px">
+            <md-grid-list cols="4" rows="1" rowHeight="80px">
               <md-grid-tile colspan="3" class="grid-left-align">
                 <div class="course-name">
                   <h4>{{course.name}}</h4>
