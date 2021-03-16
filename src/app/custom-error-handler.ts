@@ -5,7 +5,7 @@ import * as StackTrace from 'stacktrace-js';
 
 @Injectable()
 export class CustomErrorHandler extends ErrorHandler {
-    private serverUrl = "http://attendance.portlandbiblecollege.org/server/";
+    private serverUrl = "https://attendance.portlandbiblecollege.org/server/";
 
     constructor(private http: Http) {
         // The true paramter tells Angular to rethrow exceptions, so operations like 'bootstrap' will result in an error

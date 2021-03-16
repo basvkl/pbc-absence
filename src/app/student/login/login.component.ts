@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
 	login;
 	model;
 
+	currentYear = new Date().getFullYear();
+
 	constructor(private populiService: PopuliService, private router: Router) { }
 
 	ngOnInit(): void {
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit {
 				this.model.loggingIn = false;
 				this.model.error = response.error;
 			} else {
-				this.router.navigate(['history']); 
+				this.router.navigate(['history']);
 			}
 		}, err => {
 			this.model.loginBtnText = "Login";
