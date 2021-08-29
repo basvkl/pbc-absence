@@ -29,7 +29,7 @@ export class HistoryComponent implements OnInit {
 			"APPROVED": {icon: "check_circle", toolTip: "Approved"},
 			"RESUBMIT": {icon: "refresh", toolTip: "Please Resubmit"}, //Should never happen
 			"DENIED": {icon: "cancel", toolTip: "Request Denied"},
-		}; 
+		};
 		this.cutoffDate = moment().hour(0).minute(0).second(0).millisecond(0).subtract(14, 'days');
 	}
 
@@ -61,7 +61,6 @@ export class HistoryComponent implements OnInit {
 				} else {
 					this.courses = {};
 				}
-				
 			});
 		});
 	}
@@ -96,11 +95,9 @@ export class HistoryComponent implements OnInit {
 					}
 					meetings.map(meeting =>{
 						var attendedMeeting:any =  _.find(attendance, {meetingid: meeting.meetingid});
-						// meeting.start = moment(meeting.start).subtract(19, "days").toDate(); //Testing 
 						if(attendedMeeting) {
 							if(moment(meeting.start).isBefore(this.cutoffDate)){
 								meeting.passedCutoff = true;
-								console.log("nope");
 							}
 							meeting.attendance = attendedMeeting.status;
 						}
@@ -111,7 +108,7 @@ export class HistoryComponent implements OnInit {
 					meetings.map(meeting => {
 						for (var i= 0; i < response.length; i++) {
 							if (response[i].meetingId === meeting.meetingid) {
-								meeting.status = response[i].status != null ? response[i].status : "PENDING"; 
+								meeting.status = response[i].status != null ? response[i].status : "PENDING";
 							}
 						}
 					});
@@ -127,9 +124,9 @@ export class HistoryComponent implements OnInit {
 		dialogRef.componentInstance.meeting = meeting;
 		dialogRef.afterClosed().subscribe(reason => {
 			if(reason) {
-				meeting.saving = true; 
+				meeting.saving = true;
 				var tmpDate = new Date(meeting.start);
-				var meetingDate = tmpDate.getFullYear() + "/" + tmpDate.getMonth() + "/" + tmpDate.getDate();
+				var meetingDate = tmpDate.getFullYear() + "/" + (tmpDate.getMonth() + 1) + "/" + tmpDate.getDate();
 				var meetingPeriod = this.getPeriodFromTime(meeting.start);
 
 				if(!meeting.meetingid){
